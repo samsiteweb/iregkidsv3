@@ -1,0 +1,23 @@
+<div fxLayoutAlign="center center" style="height: 100vh;">
+  <mat-card class="loginCard" fxLayoutGap="10px" fxLayout="column">
+    <div fxLayoutAlign="center center" fxLayout="column" style="width: 100%;">
+      <div class="mat-h1">{{ title | uppercase }}</div>
+      <div class="mat-body-strong" style="text-align: center;">
+        {{ message | titlecase }}
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+      <a *ngIf="showBack" mat-stroked-button (click)="emitEvent('back')">{{
+        backText
+      }}</a>
+      <button
+        *ngIf="showForward"
+        mat-raised-button
+        color="primary"
+        (click)="emitEvent('forward')"
+      >
+        {{ forwardText }}
+      </button>
+    </div>
+  </mat-card>
+</div>

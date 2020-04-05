@@ -1,56 +1,243 @@
-<div style="width: 100vw">
-  <mat-card class="regCard" fxLayoutGap="15px" fxLayout="column">
-    <div fxLayout="column" fxLayoutAlign="center center">
-      <h1 style="color:blueviolet">Register Admin</h1>
-      <mat-card-subtitle>Reponses</mat-card-subtitle>
+<app-dialog
+  [showBack]="false"
+  [forwardText]="'Proceed to Login'"
+  (forwardClicked)="navigate()"
+  [title]="'Congratulations'"
+  [message]="response.Message"
+  *ngIf="formSubmited"
+>
+</app-dialog>
+
+<app-dialog
+  [backText]="'NO'"
+  [forwardText]="'YES'"
+  (backClicked)="conflictResolver('back')"
+  (forwardClicked)="conflictResolver('forward')"
+  [title]="'Conflict'"
+  [message]="response.Message"
+  *ngIf="isConflict"
+>
+</app-dialog>
+<div style="width: 100vw;">
+  <mat-card class="regCard" fxLayout="column" fxLayoutAlign="center center">
+    <div
+      *ngIf="!accountCodeVerified"
+      style="width: 100%;"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
+      <div class="mat-h1" style="color: blueviolet;">
+        ENTER ACCOUNT CODE
+      </div>
+      <div fxFlexAlign="center" style="text-align: center;">
+        <mat-hint
+          >Enter the account code received during organisation
+          registration</mat-hint
+        >
+      </div>
+      <div *ngIf="errorMessage" fxFlexAlign="center">
+        <mat-hint [ngStyle]="{ color: 'red' }">{{ errorMessage }}</mat-hint>
+      </div>
+      <form
+        [formGroup]="verifyForm"
+        (ngSubmit)="verifyAccountCode(verifyForm.value)"
+        style="width: 50%;"
+      >
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <input
+            formControlName="accountCode"
+            matInput
+            placeholder=" - * * * * * -"
+            style="font-size: 30px; text-align: center;"
+          />
+          <mat-error>*field is required</mat-error>
+          <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+        </mat-form-field>
+
+        <div fxLayout="column" fxLayoutGap="5px">
+          <app-custom-btn
+            fxFlexAlign="center"
+            [type]="'submit'"
+            [isloading]="isAccFormLoading"
+            [color]="'primary'"
+            [text]="'Verify'"
+          >
+          </app-custom-btn>
+        </div>
+      </form>
     </div>
 
     <div
-      fxLayoutAlign="start"
-      fxLayout="column"
-      style="width: 100%; padding: 20px;"
+      style="width: 100%;"
+      *ngIf="accountCodeVerified"
+      [hidden]="formSubmited || isConflict"
     >
-      <mat-form-field appearance="legacy" style="width: 100%;">
-        <mat-label>Organisation Name:</mat-label>
-        <input matInput placeholder="" />
-        <mat-hint>error messages</mat-hint>
-      </mat-form-field>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <p
+          class="mat-display-1 mat-body-strong"
+          style="color: blueviolet; margin: 0;"
+        >
+          Register Admin
+        </p>
+        <p class="mat-h3 mat-body-strong">
+          Register an admin for your organization
+        </p>
+        <div *ngIf="errorMessage" fxFlexAlign="center">
+          <mat-hint [ngStyle]="{ color: 'red' }">{{ errorMessage }}</mat-hint>
+        </div>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <img
+          *ngIf="isLogo"
+          (load)="imageLoad()"
+          [src]="logoUrl"
+          alt="logo"
+          width="100"
+          height="100"
+        />
+        <div class="mat-h2" *ngIf="response.Info">
+          {{ response.Info.Name | uppercase }}
+        </div>
+      </div>
+      <p
+        class="mat-small"
+        style="text-align: left; color: red; padding-left: 20px;"
+      >
+        *Please enter the correct information of your administrator
+      </p>
+      <form
+        [formGroup]="AdminForm"
+        (ngSubmit)="onSubmit(AdminForm.value)"
+        #form="ngForm"
+      >
+        <div
+          fxLayoutAlign="start"
+          fxLayout="column"
+          style="width: 100%; padding-left: 20px; padding-right: 20px;"
+        >
+          <div
+            fxLayout="column"
+            fxLayoutGap="5px"
+            style="padding-bottom: 10px;"
+          >
+            <img
+              *ngIf="!imgURL"
+              src="./assets/default.png"
+              height="100"
+              width="100"
+            />
+            <img
+              fxFlexAlign="left"
+              *ngIf="imgURL"
+              [src]="imgURL"
+              height="100"
+              width="100"
+            />
+            <input
+              fxFlexAlign="left"
+              style="display: none;"
+              #file
+              type="file"
+              accept="image/*"
+              (change)="preview(file.files)"
+            />
+            <app-custom-btn
+              fxFlexAlign="left"
+              [type]="'button'"
+              [isloading]="false"
+              [color]="'accent'"
+              [text]="'Upload Picture'"
+              (btnClicked)="file.click()"
+            ></app-custom-btn>
+          </div>
+          <mat-form-field appearance="legacy" style="width: 100%;">
+            <mat-label>First Name:</mat-label>
+            <input matInput placeholder="" formControlName="firstName" />
+            <mat-error
+              *ngIf="
+                (!AdminForm.controls['firstName'].valid &&
+                  AdminForm.controls['firstName'].touched) ||
+                formSubmited == true
+              "
+              >*Field is required</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="legacy" style="width: 100%;">
+            <mat-label>Last Name:</mat-label>
+            <input matInput placeholder="" formControlName="lastName" />
+            <mat-error
+              *ngIf="
+                (!AdminForm.controls['lastName'].valid &&
+                  AdminForm.controls['lastName'].touched) ||
+                formSubmited == true
+              "
+              >*Field is required</mat-error
+            >
+          </mat-form-field>
 
-      <mat-form-field appearance="legacy" style="width: 100%;">
-        <mat-label>Email:</mat-label>
-        <input matInput placeholder="" />
-        <mat-hint>error messages</mat-hint>
-      </mat-form-field>
+          <mat-form-field appearance="legacy" style="width: 100%;">
+            <mat-label>Email:</mat-label>
+            <input matInput placeholder="" formControlName="email" />
+            <mat-error
+              *ngIf="
+                (!AdminForm.controls['email'].valid &&
+                  AdminForm.controls['email'].touched) ||
+                formSubmited
+              "
+            >
+              {{ getErrorEmail() }}
+            </mat-error>
+          </mat-form-field>
 
-      <mat-form-field appearance="legacy" style="width: 100%;">
-        <mat-label>Address:</mat-label>
-        <input matInput placeholder="" />
-        <mat-hint>error messages</mat-hint>
-      </mat-form-field>
+          <mat-form-field appearance="legacy" style="width: 100%;">
+            <mat-label>Contact:</mat-label>
+            <input matInput placeholder="" formControlName="contact" />
+            <mat-error *ngIf="hasError('contact', 'required')"
+              >*Field is required</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="legacy" style="width: 100%;">
+            <mat-label>Username:</mat-label>
+            <input matInput placeholder="" formControlName="username" />
+            <mat-error *ngIf="hasError('username', 'required')"
+              >*Field is required</mat-error
+            >
+          </mat-form-field>
 
-      <mat-form-field appearance="legacy" style="width: 100%;">
-        <mat-label>Contact:</mat-label>
-        <input matInput placeholder="" />
-        <mat-hint>error messages</mat-hint>
-      </mat-form-field>
+          <mat-form-field appearance="legacy" style="width: 100%;">
+            <mat-label>Password:</mat-label>
 
-      <mat-form-field appearance="legacy" style="width: 100%;">
-        <mat-label>Phone Number:</mat-label>
-        <input matInput placeholder="" />
-        <mat-hint>error messages</mat-hint>
-      </mat-form-field>
+            <input
+              formControlName="password"
+              matInput
+              [type]="hide ? 'password' : 'text'"
+            />
+            <button
+              type="button"
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide"
+            >
+              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+            <mat-error *ngIf="hasError('password', 'required')"
+              >*Field is required</mat-error
+            >
+          </mat-form-field>
+        </div>
 
-      <mat-form-field appearance="legacy" style="width: 100%;">
-        <mat-label>Country:</mat-label>
-        <input matInput placeholder="" />
-        <mat-hint>error messages</mat-hint>
-      </mat-form-field>
-    </div>
-
-    <div fxLayout="column" fxLayoutGap="5px">
-      <button mat-raised-button color="primary" fxFlexAlign="center">
-        Register
-      </button>
+        <div fxLayout="column" fxLayoutGap="5px">
+          <app-custom-btn
+            fxFlexAlign="center"
+            [type]="'submit'"
+            [isloading]="formLoading"
+            [color]="'primary'"
+            [text]="'Submit'"
+          ></app-custom-btn>
+        </div>
+      </form>
     </div>
   </mat-card>
 </div>

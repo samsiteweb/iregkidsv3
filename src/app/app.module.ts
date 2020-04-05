@@ -11,7 +11,12 @@ import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.
 import { CustomMaterialModule } from "./shared.module";
 import { RegCompComponent } from "./reg/reg-comp/reg-comp.component";
 import { AdminRegComponent } from "./reg/admin-reg/admin-reg.component";
-
+import { HttpClientModule } from "@angular/common/http";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { CustomBtnComponent } from "./components/custom-btn/custom-btn.component";
+import { DialogComponent } from "./components/dialog/dialog.component";
+import { RegserviceService } from "./providers/services/reg/regservice.service";
+import { AccountDetailsResolver } from "./reg/reg-comp/accountDetails-resolver.service";
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,16 +24,21 @@ import { AdminRegComponent } from "./reg/admin-reg/admin-reg.component";
     ForgotPasswordComponent,
     RegCompComponent,
     AdminRegComponent,
-    OrgRegComponent
+    OrgRegComponent,
+    CustomBtnComponent,
+    DialogComponent,
   ],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
-    CustomMaterialModule
+    CustomMaterialModule,
+    HttpClientModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [RegserviceService, AccountDetailsResolver],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

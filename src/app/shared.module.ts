@@ -7,6 +7,12 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSelectModule} from '@angular/material/select';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatDialogModule} from '@angular/material/dialog';
+
 /**
  * NgModule that includes all Material modules that are required to serve the demo-app.
  */
@@ -18,7 +24,12 @@ import { MatIconModule } from "@angular/material/icon";
     MatButtonModule,
     MatInputModule,
     MatIconModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatDialogModule
   ]
 })
 export class CustomMaterialModule {}

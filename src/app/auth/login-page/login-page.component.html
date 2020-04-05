@@ -1,7 +1,7 @@
-<div fxLayoutAlign="center center" style="height: 100vh; ">
+<div fxLayoutAlign="center center" style="height: 100vh;">
   <mat-card class="loginCard" fxLayoutGap="40px" fxLayout="column">
     <div fxLayout="column" fxLayoutAlign="center center">
-      <h1 style="color:blueviolet">Login</h1>
+      <h1 style="color: blueviolet;">Login</h1>
       <mat-card-subtitle
         >Please enter your credentials to Login</mat-card-subtitle
       >
@@ -49,14 +49,14 @@
       </div>
       <div fxLayout="row" fxFlexAlign="center">
         <div fxFlexAlign="end" style="padding-right: 15px;">
-          <button mat-stroked-button color="primary" routerLink="/reg/admin">
+          <button mat-stroked-button color="primary" routerLink="/reg/register">
             New Registration
           </button>
         </div>
         <div fxFlexAlign="end">
           <a
             mat-flat-button
-            routerLink="/reg/continue"
+            [routerLink]="['/reg/continue']"
             style="color: rgb(27, 0, 100);"
             >Continue Registration</a
           >
